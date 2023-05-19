@@ -12,7 +12,7 @@ This project does not require any third-party plugins. Decisions were made not t
 - H2 in-memory database
 
 ### Step 1: Clone repository
-```http
+```
 git clone git@github.com:RyanG702/moebelhoeffner.git
 ```
 
