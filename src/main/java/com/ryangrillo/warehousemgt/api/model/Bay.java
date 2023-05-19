@@ -2,24 +2,32 @@ package com.ryangrillo.warehousemgt.api.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ryangrillo.warehousemgt.api.enums.BayType;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.validator.constraints.Range;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Table(uniqueConstraints={
-        @UniqueConstraint(columnNames={"id", "rowNumber", "shelfNumber", "levelNumber"})
+        @UniqueConstraint(columnNames={"bayId", "rowNumber", "shelfNumber", "levelNumber"})
 })
 public class Bay {
     @Id
     @GeneratedValue
-    private Long id;
+    private Long bayId;
+
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    @Column(unique=true, nullable = false)
+    private String bayLabel;
 
     @OneToMany
-    @NotNull
+    @NotNull(message = "Tags not set")
+    @JoinColumn(name = "bay")
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<Tag> tags;
 
@@ -33,25 +41,60 @@ public class Bay {
     private String levelNumber;
 
     @Column(nullable = false)
-    private boolean isPalletBay;
-
-    @Column(nullable = false)
-    private boolean isCartBay;
+    @Enumerated(EnumType.STRING)
+    private BayType bayType;
 
     @NotNull
     @Range(min = 1, max = 9)
     private int holdingPoints;
 
+    @JsonIgnore
+    private int holdingPointsUsed;
+
     @JoinColumn(name = "warehouse")
     @ManyToOne(targetEntity = Warehouse.class, fetch = FetchType.LAZY)
-    //@NotNull(message = "Warehouse not set")
     @JsonIgnore
     private Warehouse warehouse;
 
-    @Column(name = "warehouse", insertable = false, updatable = false)
-    private Long warehouseId;
+    private LocalDateTime timestamp;
 
     public Bay() {
+    }
+
+    public Bay(String rowNumber, String shelfNumber, String levelNumber, String bayLabel, List<Tag> tags, BayType bayType, int holdingPoints, Warehouse warehouse) {
+        this.rowNumber = rowNumber;
+        this.shelfNumber = shelfNumber;
+        this.levelNumber = levelNumber;
+        this.bayLabel = bayLabel;
+        this.tags = tags;
+        this.bayType = bayType;
+        this.holdingPoints = holdingPoints;
+        this.warehouse = warehouse;
+        this.timestamp = LocalDateTime.now();
+    }
+
+    public int getHoldingPointsUsed() {
+        return holdingPointsUsed;
+    }
+
+    public void setHoldingPointsUsed(int holdingPointsUsed) {
+        this.holdingPointsUsed = holdingPointsUsed;
+    }
+
+    public BayType getBayType() {
+        return bayType;
+    }
+
+    public String getBayLabel() {
+        return bayLabel;
+    }
+
+    public void setBayLabel(String bayLabel) {
+        this.bayLabel = bayLabel;
+    }
+
+    public void setBayType(BayType bayType) {
+        this.bayType = bayType;
     }
 
     public Warehouse getWarehouse() {
@@ -92,22 +135,6 @@ public class Bay {
 
     public void setLevelNumber(String levelNumber) {
         this.levelNumber = levelNumber;
-    }
-
-    public boolean getIsPalletBay() {
-        return isPalletBay;
-    }
-
-    public void setIsPalletBay(boolean isPalletBay) {
-        this.isPalletBay = isPalletBay;
-    }
-
-    public boolean getIsCartBay() {
-        return isCartBay;
-    }
-
-    public void setIsCartBay(boolean isCartBay) {
-        this.isCartBay = isCartBay;
     }
 
     public int getHoldingPoints() {

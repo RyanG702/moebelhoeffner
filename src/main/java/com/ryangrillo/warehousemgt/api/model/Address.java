@@ -8,7 +8,7 @@ public class Address {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private Long addressId;
 
     @Column(nullable = false)
     private String streetAddress;
@@ -24,7 +24,7 @@ public class Address {
 
     @OneToOne
     @PrimaryKeyJoinColumn
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "warehouseId")
     private Warehouse warehouse;
 
     public Address() {
@@ -65,7 +65,7 @@ public class Address {
     @Override
     public String toString() {
         return "Address{" +
-                "Id=" + id +
+                "Id=" + addressId +
                 ", streetAddress='" + streetAddress + '\'' +
                 ", city='" + city + '\'' +
                 ", state='" + state + '\'' +

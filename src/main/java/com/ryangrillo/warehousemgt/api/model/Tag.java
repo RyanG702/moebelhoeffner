@@ -2,23 +2,22 @@ package com.ryangrillo.warehousemgt.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+
 
 @Entity
 public class Tag {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private Long tagId;
 
-    @Column(unique=true, nullable = false)
+    @Column(nullable = false)
     @Pattern(regexp="[a-z]+", message="tag must be lowercase")
     private String name;
 
     @JoinColumn(name = "bay")
-    @ManyToOne(targetEntity = Bay.class, fetch = FetchType.LAZY)
-    //@NotNull(message = "Tag not set")
+    @ManyToOne(targetEntity = Bay.class, fetch = FetchType.LAZY, cascade= CascadeType.ALL)
     @JsonIgnore
     private Bay bay;
 
