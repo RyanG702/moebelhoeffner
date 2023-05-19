@@ -24,7 +24,7 @@ git clone git@github.com:RyanG702/moebelhoeffner.git
 ### Step 3: Interact with application
 - Swagger UI: http://localhost:8080/swagger-ui/index.html#/
 - H2 Database Console: http://localhost:8080/h2-console
-  - Username: sa
+  - Username: `sa`
   - Password: *leave blank*
 
 ### Step 4: Get started
@@ -41,8 +41,8 @@ When you first get started, there will be no `warehouse` or `bay` entities pre-l
 POST /api/v1/warehouses/
 ```
 
+Example payload:
 ```json
-// Example payload
 {
     "name": "Warehouse 1",
     "identifierCode": "111",
@@ -119,8 +119,8 @@ POST /api/v1/warehouses/{identifierCode}/bays
 | :-------- | :------- | :------------------------- |
 | `identifierCode` | `string` | **Required**. The three-digit warehouse identifier. |
 
+Example payload:
 ```json
-// Example payload
 {
     "tags": [
         {
@@ -174,8 +174,8 @@ POST /api/v1/warehouses/{identifierCode}/bays/{bayLabel}/busyHoldingPoints
 | `identifierCode` | `string` | **Required**. The three-digit warehouse identifier. |
 | `bayLabel` | `string` | **Required**. The label of the bay. |
 
+Example payload:
 ```json
-// Example payload
 {
     "quantity": 1
 }
